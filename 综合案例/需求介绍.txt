@@ -1,0 +1,45 @@
+有2个文件，
+user.txt ,海量用户1亿条
+black_list.txt,黑名单1万条
+
+从海量用户中
+1-统计实际有多少个黑名单用户，
+2-并剔除掉他们后的用户中，统计各地区的人数，统计结果写到hdfs的一个csv文本文件。
+3-用SparkCore的RDD做。
+4-再用SparkSQL的DSL，SparkSQL的SQL各做一次，且不光保存为csv，还要保存到mysql中。
+还要保存到hive中。
+5-程序最后放在yarn上运行。
+
+大概思路
+1加载user.txt，形成RDD1
+2加载black_list.txt，形成RDD2，并collect形成list
+3定义广播变量，将list广播出去
+4定义累加器，碰到实际的黑名单用户就+1
+5在分布式代码中，也就是在Executor的task代码中获取广播变量list，
+6对海量数据的局部数据的每条进行判断，如果存在于list中，则累加器+1，且后面要剔除。
+7对RDD1进行filter过滤后，统计各地区的人数，比如('上海',888),('北京',786)。。
+8将上面的结果输出到HDFS的一个csv文本文件
+
+9加载user.txt形成DataFrame1
+10加载black_list.txt形成DataFrame2
+11 DSL风格
+  df3=DataFrame1.leftjoin(DataFrame2).groupBy等操作，统计各地区的人数
+  df3.persit()#因为df3被使用2次
+  df3.write...csv
+  df3.write...jdbc
+12 DSL风格
+  cnt=DataFrame1.join(DataFrame2).count()等操作，统计实际有多少个黑名单用户
+13 SQL风格统计各地区的人数
+	spark.sql('''
+	select a.city,
+		   count(1) as cnt
+	from user a left join back_list b on a.id=b.id
+	where b.id is null
+	group by a.city
+	''').show()
+
+14SQL风格统计实际有多少个黑名单用户
+	spark.sql('''
+	select count(1) as cnt
+	from user a join back_list b on a.id=b.id
+	''').show()

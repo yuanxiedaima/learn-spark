@@ -1,0 +1,78 @@
+<configuration>
+    <!-- 存储元数据mysql相关配置 -->
+    <property>
+        <name>javax.jdo.option.ConnectionURL</name>
+        <value>jdbc:mysql://node1.itcast.cn:3306/hive3?createDatabaseIfNotExist=true&amp;useSSL=false&amp;useUnicode=true&amp;characterEncoding=UTF-8</value>
+    </property>
+
+    <property>
+        <name>javax.jdo.option.ConnectionDriverName</name>
+        <value>com.mysql.jdbc.Driver</value>
+    </property>
+
+    <property>
+        <name>javax.jdo.option.ConnectionUserName</name>
+        <value>root</value>
+    </property>
+
+    <property>
+        <name>javax.jdo.option.ConnectionPassword</name>
+        <value>123456</value>
+    </property>
+
+    <!-- H2S运行绑定host -->
+    <property>
+        <name>hive.server2.thrift.bind.host</name>
+        <value>node1.itcast.cn</value>
+    </property>
+
+    <!-- 远程模式部署metastore metastore地址 -->
+    <property>
+        <name>hive.metastore.uris</name>
+        <value>thrift://node1:9083</value>
+    </property>
+
+    <property>
+    	<name>hive.metastore.warehouse.dir</name>
+    	<value>hdfs://node1:8020/user/hive/warehouse</value>
+    </property>
+
+    <!-- 关闭元数据存储授权  -->
+    <property>
+        <name>hive.metastore.event.db.notification.api.auth</name>
+        <value>false</value>
+    </property>
+
+    <!--开启hive权限认证机制-->
+    <property>
+        <name>hive.security.authorization.enabled</name>
+        <value>true</value>
+        <description>enable or disable the hive client authorization
+                    true开启权限认证功能
+        </description>
+    </property>
+
+    <property>
+        <name>hive.server2.enable.doAs</name>
+        <value>false</value>
+    </property>
+
+    <property>
+        <name>hive.users.in.admin.role</name>
+        <value>root</value>
+        <description>admin 权限用户列表</description>
+    </property>
+
+    <property>
+        <name>hive.cli.print.header</name>
+        <value>true</value>
+        <description>设置结果表显示表头字段</description>
+    </property>
+
+    <property>
+        <name>hive.resultset.use.unique.column.names</name>
+        <value>false</value>
+        <description>设置结果表只显示字段名，不显示表名</description>
+    </property>
+</configuration>
+

@@ -1,0 +1,2 @@
+1-spark On yarn版时，读取的文件不要是Linux本地文件，需要是HDFS分布式文件。
+2-需要的其他jar包文件，需要额外上传到HDFS上，比如将mysql驱动jar包上传到/spark/jars目录下。
